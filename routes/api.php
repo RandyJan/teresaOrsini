@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\authController;
 use App\Models\sensorData;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,9 @@ Route::get('/getData',[sensorController::class,'show']);
 Route::post('/register',[authController::class,'signin']);
 Route::post('/login',[authController::class,'login']);
 Route::get('/getLogs',[sensorController::class,'getLogs']);
+Route::post('/changepw',[authController::class,'changepw']);
+Route::post('/saveLogs',[sensorController::class,'saveLogs']);
+Route::get('/getRecords',[sensorController::class,'getAllRecords']);
+Route::post('/accessWeb',[authController::class,'accessWeb']);
+Route::post('/accessRegis',[authController::class,'accessRegis']);
+Route::post('/clearLogs',[sensorController::class,'clearLogs']);

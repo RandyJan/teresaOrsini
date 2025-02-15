@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\historyLogs;
 use App\Models\logs;
 use App\Models\sensorData;
 use Carbon\Carbon;
@@ -99,5 +100,46 @@ class sensorController extends Controller
     return response()->json(
         $roomlogs
     );
+    }
+    public function saveLogs(Request $request){
+        $date = Carbon::now('Asia/Singapore')->format('Y-m-d h:i:s A');
+       
+        $dataCheck = historyLogs::orderBy('pdate','desc')->where('room',$request->room)->first();
+        $Jsonify = json_decode($dataCheck,true);
+        Log::info($request);
+        if($dataCheck){
+
+            if($Jsonify['activity'] == $request->activity && $Jsonify['room']==$request['room']){
+            return response()->json(['StatusCode'=>200,
+        'message'=>'data rejected'],200);
+            }
+        }
+            $res = historyLogs::insert(['pdate'=>$date,
+            'user_name'=>$request->username,
+            'activity'=>$request->activity,
+            'room'=>$request->room]);
+
+        
+        if(!$res){
+             return response()->json(['StatusCode'=>500,
+             'message'=>"Failed"],500);
+        }
+        return response()->json(['StatusCode'=>200,
+        'message'=>"success"]);
+    
+    }
+    public function getAllRecords(){
+        $res = historyLogs::orderBy('pdate','desc')->get();
+        if(Count($res) ==0){
+            return response()->json(['StatusCode'=>404,'message'=>'records not found'],200);
+        }
+        return response()->json($res,200);
+    }
+    public function clearLogs(){
+        $res = historyLogs::query()->delete();
+        if(!$res){
+            return response()->json(['StatusCode'=>500,'message'=>'Delete fail'],500);
+        }
+        return response()->json(['StatusCode'=>200,'message'=>'Success'],200);
     }
 }

@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class users extends Model
+class historyLogs extends Model
 {
     use HasFactory;
-    protected $table = 'users';
-
+    protected $table = "history_logs";
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'session',
-        'position'
+        'pdate',
+        'user_name',
+        'activity',
+        'room'
     ];
-    
+
+    public $timestamps = false;
 }
